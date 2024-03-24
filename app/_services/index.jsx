@@ -29,10 +29,10 @@ export const getCourseList = async()=>{
 
 
 export const getCourseById = async(id)=>{
-  const query = gpl`
-  query course {
+  const query = gql`
+  query CoursesLists {
     coursesList(where: {id: "`+id+`"}) {
-      chapterss {
+      chapters {
         ... on Chapters {
           id
           name
@@ -41,14 +41,16 @@ export const getCourseById = async(id)=>{
           }
         }
       }
-      descriptions
-      name
-      id
       free
+      descriptions
+      tags
       totalChapters
       youtubeUrl
+      id
+      name
     }
   }
+  
   `
   const result = await request(MasterUrl, query);
     return result;

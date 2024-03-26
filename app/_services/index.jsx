@@ -28,7 +28,7 @@ export const getCourseList = async()=>{
 }
 
 
-export const getCourseById = async(id)=>{
+export const getCourseById = async(id , userEmail)=>{
   const query = gql`
   query CoursesLists {
     coursesList(where: {id: "`+id+`"}) {
@@ -48,10 +48,48 @@ export const getCourseById = async(id)=>{
       youtubeUrl
       id
       name
+      auther
     }
+
+    userEnrolls(where: {courseId: "`+id+`", 
+    userEmail: "`+userEmail+`"}) {
+    courseId
+    userEmail
+    completedChapters
+  }
   }
   
   `
   const result = await request(MasterUrl, query);
     return result;
+}
+
+export const EnrollCourse= async(courseId , userEmail)=>{
+  const mutationQuery = gql`
+  mutation EnrollCourse {
+    createUserEnroll(data: {courseId: "`+courseId+`", userEmail: "`+userEmail+`"}) {
+      id
+    }
+  }
+  
+  `
+
+  const result = await request(MasterUrl, mutationQuery);
+    return result;
+}
+
+export const PublishCourse = async(id)=>{
+  const mutationQuery = gql`
+  mutation EnrollCourse {
+    publishUserEnroll(where: {id: "`+id+`"} ){
+      id 
+    }
+  }
+  
+  
+  `
+  const result = await request(MasterUrl, mutationQuery);
+    return result;
+
+
 }

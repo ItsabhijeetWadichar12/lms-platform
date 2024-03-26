@@ -6,23 +6,26 @@ import VideoPlayer from './_components/VideoPlayer';
 import CourseDetails from './_components/CourseDetails';
 import Options from './_components/Options';
 import Enroll from './_components/Enroll';
-
+import { useUser } from '@clerk/nextjs';
 
 function CoursePreview({params}) {
 
   const [courseDetails , setCourseDetails] = useState([]);
+  const [userCourse , setUserCourse] = useState([]);
+
+  const {user}= useUser();
 
   useEffect(()=>{
     console.log(params.courseId)
     params.courseId?getCorse(params.courseId):null;
-  },[])
+  },[user])
 
 
   const getCorse = ()=>{
-    getCourseById(params.courseId).then(res=>{
+    getCourseById(params.courseId , user?.primaryEmailAddress?.emailAddress).then(res=>{
       console.log(res);
       setCourseDetails(res.coursesList);
-      console.log(setCourseDetails(res.coursesList));
+      setUserCourse(res?.userEnrolls[0]);
     })
   }
 
@@ -42,7 +45,9 @@ function CoursePreview({params}) {
 
         <div className='mx-5 md:mt-0'>
           <Options/>
-          <Enroll courseDetails={courseDetails}/>
+          <Enroll courseDetails={courseDetails}
+          userCourse={userCourse}
+          />
         </div>
 
 

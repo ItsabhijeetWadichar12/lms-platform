@@ -5,7 +5,7 @@ function Options() {
         { 
             id: 1, 
             name: "Github",
-            icon:'/github.png'
+            icon:'/social.png'
         },
         { 
             id: 2, 
